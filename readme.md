@@ -1,7 +1,7 @@
 # Sozo.Toolkit
 
 [![NuGet Version](https://img.shields.io/nuget/v/Sozo.Toolkit.svg)](https://www.nuget.org/packages/Sozo.Toolkit)  
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Build, Test, and Publish Package (Beta or Stable)](https://github.com/sozohub/sozo-toolkit/actions/workflows/main.yml/badge.svg)](https://github.com/sozohub/sozo-toolkit/actions/workflows/main.yml)
 
 **Sozo.Toolkit** is a versatile .NET utility library that brings together a set of helpers and extension methods to accelerate your development. This package includes:
 
