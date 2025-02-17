@@ -65,7 +65,7 @@ string accentedText = "Às ínclitas maçãs, o coração exibia êxtase, paixã
 string plainText = accentedText.RemoveDiacritics(); // Returns: "As inclitas macas, o coracao exibia extase, paixao e jubilo; ja a fenix, a luz do por-do-sol, encantava o ceu."
 
 string textWithVowels = "Às ínclitas maçãs";
-string withoutVowels = textWithVowels.RemoveSpecificChars('a', 'e', 'i', 'o', 'u'); // Returns: "s nclts mçs"
+string withoutVowels = textWithVowels.RemoveSpecificChars('a', 'e', 'i', 'o', 'u'); // Returns: "Às ínclts mçãs"
 
 string textWithDuplicates = "Às  ínclitas      maçãs";
 string cleanedText = textWithDuplicates.RemoveDuplicateSpaces(); // Returns: "Às ínclitas maçãs"

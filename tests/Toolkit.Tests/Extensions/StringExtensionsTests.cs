@@ -99,7 +99,7 @@ public class StringExtensionsTests
         // Arrange
         const string input = "Às ínclitas maçãs";
         char[] charsToRemove = ['a', 'e', 'i', 'o', 'u'];
-        const string expected = "s nclts mçs";
+        const string expected = "Às ínclts mçãs";
 
         // Act
         var result = input.RemoveSpecificChars(charsToRemove);
