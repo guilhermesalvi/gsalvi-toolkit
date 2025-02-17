@@ -1,0 +1,60 @@
+name: Build, Test, and Publish Package (Beta or Stable)
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Get Version using GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.10
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Solution
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Tests
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+      - name: Determine Package Version
+        id: pkgversion
+        run: |
+          echo "GITHUB_REF: $GITHUB_REF"
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "Stable release detected."
+            VERSION="${{ steps.gitversion.outputs.NuGetVersion }}"
+          else
+            echo "Beta release detected."
+            # Create a beta version by appending a beta suffix and the commit count
+            VERSION="${{ steps.gitversion.outputs.MajorMinorPatch }}-beta.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
+          fi
+          echo "Using version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Pack Project
+        run: dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ steps.pkgversion.outputs.version }}
+
+      - name: Publish to NuGet
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
