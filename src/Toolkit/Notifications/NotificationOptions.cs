@@ -1,6 +1,10 @@
-﻿namespace Sozo.Toolkit.Notifications;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+
+namespace Sozo.Toolkit.Notifications;
 
 public record NotificationOptions
 {
-    public string ResourcesPath { get; set; } = "Resources";
+    public RequestCulture? DefaultRequestCulture { get; set; }
+    public IList<CultureInfo>? SupportedCultures { get; set; }
 }

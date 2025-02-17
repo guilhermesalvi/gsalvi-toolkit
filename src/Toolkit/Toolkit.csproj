@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Sozo.Toolkit</RootNamespace>
     <AssemblyName>Sozo.Toolkit</AssemblyName>
+
+    <Version>0.0.1</Version>
+    <Authors>Guilherme Salvi</Authors>
   </PropertyGroup>
 
   <ItemGroup>

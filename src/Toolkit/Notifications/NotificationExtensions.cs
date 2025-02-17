@@ -6,12 +6,23 @@ namespace Sozo.Toolkit.Notifications;
 
 public static class NotificationExtensions
 {
+    /// <summary>
+    /// Registers the simple notification manager without localization.
+    /// </summary>
+    /// <param name="services"></param>
     private static void AddNotifications(
         this IServiceCollection services)
     {
         services.AddScoped<NotificationManager>();
     }
 
+    /// <summary>
+    /// Registers the localized notification manager with the specified resource type.
+    /// Tip: See the official docs for more information on how to create resource files.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="setupAction"></param>
+    /// <typeparam name="TResource"></typeparam>
     public static void AddLocalizedNotifications<TResource>(
         this IServiceCollection services,
         Action<NotificationOptions> setupAction)
@@ -20,10 +31,14 @@ public static class NotificationExtensions
         var notificationOptions = new NotificationOptions();
         setupAction.Invoke(notificationOptions);
 
-        if (string.IsNullOrWhiteSpace(notificationOptions.ResourcesPath))
-            throw new InvalidOperationException("ResourcesPath is required.");
-
-        services.AddLocalization(options => options.ResourcesPath = notificationOptions.ResourcesPath);
+        services
+            .Configure<RequestLocalizationOptions>(x =>
+            {
+                x.DefaultRequestCulture = notificationOptions.DefaultRequestCulture!;
+                x.SupportedCultures = notificationOptions.SupportedCultures;
+                x.SupportedUICultures = notificationOptions.SupportedCultures;
+            })
+            .AddLocalization();
 
         services.AddScoped<LocalizedNotificationManager>(sp =>
         {
@@ -35,24 +50,10 @@ public static class NotificationExtensions
         });
     }
 
-    public static void UseLocalizedNotifications(
-        this WebApplication app,
-        Action<NotificationRequestOptions> setupAction)
-    {
-        var requestOptions = new NotificationRequestOptions();
-        setupAction.Invoke(requestOptions);
-
-        if (requestOptions.DefaultRequestCulture is null)
-            throw new InvalidOperationException("DefaultRequestCulture is required.");
-
-        if (requestOptions.SupportedCultures is null)
-            throw new InvalidOperationException("SupportedCultures is required.");
-
-        app.UseRequestLocalization(options =>
-        {
-            options.DefaultRequestCulture = requestOptions.DefaultRequestCulture!;
-            options.SupportedCultures = requestOptions.SupportedCultures;
-            options.SupportedUICultures = requestOptions.SupportedCultures;
-        });
-    }
+    /// <summary>
+    /// Enables the localized notifications in the request pipeline.
+    /// </summary>
+    /// <param name="app"></param>
+    public static void UseLocalizedNotifications(this WebApplication app) =>
+        app.UseRequestLocalization();
 }
