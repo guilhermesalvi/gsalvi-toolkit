@@ -81,6 +81,7 @@ var slug = userName
     .ToLower()
     .Trim()
     .RemoveDuplicateSpaces()
+    .RemoveDiacritics()
     .Replace(" ", "-")
     .RemoveNonAlphanumeric(allow: "-");
 ```
