@@ -74,22 +74,29 @@ string mixedText = "Às ínclitas maçãs, 123!.";
 string alphaNumericOnly = mixedText.RemoveNonAlphanumeric(); // Returns: "Àsínclitasmaçãs123"
 ```
 
+Creating a slug:
+
+```csharp
+var slug = userName
+    .ToLower()
+    .Trim()
+    .RemoveDuplicateSpaces()
+    .Replace(" ", "-")
+    .RemoveNonAlphanumeric(allow: "-");
+```
+
 ### 2. Logging with Serilog
 
 ```csharp
 using Serilog;
 using Sozo.Toolkit.Logging;
 
-var enricherBuilder = new LogEnricherBuilder()
+using (LogContext.Push(new LogEnricherBuilder()
     .WithProperty("Application", "MyApp")
-    .WithProperty("Environment", "Production");
-
-Log.Logger = new LoggerConfiguration()
-    .Enrich.With(enricherBuilder)
-    .WriteTo.Console()
-    .CreateLogger();
-
-Log.Information("Application started.");
+    .WithProperty("UseCase", "MyUseCase"))
+{
+    // All logs within using block are automatically logged with the Application and UseCase properties.
+}
 ```
 
 ### 3. Notification Management
