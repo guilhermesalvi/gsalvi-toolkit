@@ -1,7 +1,7 @@
 # Sozo.Toolkit
 
 [![NuGet Version](https://img.shields.io/nuget/v/Sozo.Toolkit.svg)](https://www.nuget.org/packages/Sozo.Toolkit)  
-[![Build, Test, and Publish Package (Beta or Stable)](https://github.com/sozohub/sozo-toolkit/actions/workflows/main.yml/badge.svg)](https://github.com/sozohub/sozo-toolkit/actions/workflows/main.yml)
+[![Build, Test, and Publish Package (Beta or Stable)](https://github.com/guilhermesalvi/sozo-toolkit/actions/workflows/main.yml/badge.svg)](https://github.com/guilhermesalvi/sozo-toolkit/actions/workflows/main.yml)
 
 **Sozo.Toolkit** is a versatile .NET utility library that brings together a set of helpers and extension methods to accelerate your development. This package includes:
 
@@ -74,22 +74,30 @@ string mixedText = "Às ínclitas maçãs, 123!.";
 string alphaNumericOnly = mixedText.RemoveNonAlphanumeric(); // Returns: "Àsínclitasmaçãs123"
 ```
 
+Creating a slug:
+
+```csharp
+var slug = userName
+    .ToLower()
+    .Trim()
+    .RemoveDuplicateSpaces()
+    .RemoveDiacritics()
+    .Replace(" ", "-")
+    .RemoveNonAlphanumeric(allow: "-");
+```
+
 ### 2. Logging with Serilog
 
 ```csharp
 using Serilog;
 using Sozo.Toolkit.Logging;
 
-var enricherBuilder = new LogEnricherBuilder()
+using (LogContext.Push(new LogEnricherBuilder()
     .WithProperty("Application", "MyApp")
-    .WithProperty("Environment", "Production");
-
-Log.Logger = new LoggerConfiguration()
-    .Enrich.With(enricherBuilder)
-    .WriteTo.Console()
-    .CreateLogger();
-
-Log.Information("Application started.");
+    .WithProperty("UseCase", "MyUseCase"))
+{
+    // All logs within using block are automatically logged with the Application and UseCase properties.
+}
 ```
 
 ### 3. Notification Management
