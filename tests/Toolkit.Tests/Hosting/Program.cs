@@ -24,7 +24,7 @@ app.UseHttpsRedirection();
 app.MapGet("/api", (LocalizedNotificationManager manager, string key, string args) =>
 {
     manager.AddNotification(key, args);
-    var message = manager.Notifications.First().Message;
+    var message = manager.Notifications.First().Value;
     return Results.Text(message);
 });
 

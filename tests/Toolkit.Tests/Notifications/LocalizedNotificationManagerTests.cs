@@ -55,7 +55,7 @@ public class LocalizedNotificationManagerTests(TestHost host)
         // Assert
         manager.HasNotifications.Should().BeTrue();
         var notification = manager.Notifications.First();
-        notification.Message.Should().Be(expectedMessage);
+        notification.Value.Should().Be(expectedMessage);
         notification.Id.Should().NotBeEmpty();
         notification.Timestamp.Should().NotBe(default);
     }
@@ -83,8 +83,8 @@ public class LocalizedNotificationManagerTests(TestHost host)
         manager.HasNotifications.Should().BeTrue();
         var notifications = manager.Notifications;
         notifications.Should().HaveCount(2);
-        notifications.Any(n => n.Message == expectedMessage1).Should().BeTrue();
-        notifications.Any(n => n.Message == expectedMessage2).Should().BeTrue();
+        notifications.Any(n => n.Value == expectedMessage1).Should().BeTrue();
+        notifications.Any(n => n.Value == expectedMessage2).Should().BeTrue();
     }
 
     [Fact]
