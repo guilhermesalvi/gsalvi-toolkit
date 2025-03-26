@@ -3,7 +3,7 @@ name: CD - Publish and Sync to Main
 
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
     branches:
       - release
 
@@ -27,32 +27,16 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.11.0
-        with:
-          versionSpec: '5.x'
-
-      - name: Execute GitVersion
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.11.0
-
       - name: Restore Dependencies
         run: dotnet restore
 
       - name: Build Solution
         run: dotnet build --configuration Release --no-restore
 
-      - name: Determine Package Version
+      - name: Determine Package Version (Timestamp)
         id: pkgversion
         run: |
-          echo "GITHUB_REF: $GITHUB_REF"
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            echo "Stable release detected."
-            VERSION="${{ steps.gitversion.outputs.NuGetVersion }}"
-          else
-            echo "Beta release detected."
-            VERSION="${{ steps.gitversion.outputs.MajorMinorPatch }}-beta.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
-          fi
+          VERSION="0.1.0-beta.$(date -u +'%Y%m%d%H%M%S')"
           echo "Using version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
@@ -69,19 +53,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout release branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: release
 
-      - name: Create Pull Request from release to main
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: sync/release-to-main
-          base: main
-          title: '${{ github.event.pull_request.title }}'
-          body: '${{ github.event.pull_request.body }}'
-          labels: automated-pr
-          delete-branch: true
-          enable-auto-merge: true
+      - name: Create Pull Request from release to main via CLI
+        run: |
+          pr_title="${{ github.event.pull_request.title }}"
+          pr_body="${{ github.event.pull_request.body }}"
+          pr_author="${{ github.event.pull_request.user.login }}"
+          pr_author_url="https://github.com/${{ github.event.pull_request.user.login }}"
+
+          full_body="🔀 **Autor original:** [$pr_author]($pr_author_url)
+
+          ---
+          
+            $pr_body"
+          
+            pr_url=$(gh pr create --base main --head release --title "$pr_title" --body "$full_body" || true)
+          
+            if [[ "$pr_url" == https* ]]; then
+          echo "Pull Request created: $pr_url"
+            echo "$pr_url" > pr_url.txt
+            else
+            echo "PR already exists or failed to create."
+            fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Enable Pull Request Autocomplete
+        run: |
+          pr_number=$(gh pr list --head release --base main --json number --jq '.[0].number')
+          if [[ -n "$pr_number" ]]; then
+            echo "Auto-merging PR #$pr_number..."
+            gh pr merge "$pr_number" --auto --merge
+          else
+            echo "No matching PR found. Skipping auto-merge."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
