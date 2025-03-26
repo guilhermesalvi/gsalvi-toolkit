@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 
-namespace Sozo.Toolkit.Notifications;
+namespace GSalvi.Toolkit.Notifications;
 
 public record NotificationOptions
 {

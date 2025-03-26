@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Sozo.Toolkit.Extensions;
+using GSalvi.Toolkit.Extensions;
 
-namespace Sozo.Toolkit.Tests.Extensions;
+namespace GSalvi.Toolkit.Tests.Extensions;
 
 public class StringExtensionsTests
 {

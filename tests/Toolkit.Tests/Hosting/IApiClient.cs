@@ -1,6 +1,6 @@
 ﻿using Refit;
 
-namespace Sozo.Toolkit.Tests.Hosting;
+namespace GSalvi.Toolkit.Tests.Hosting;
 
 public interface IApiClient
 {

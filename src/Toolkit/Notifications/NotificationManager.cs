@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace Sozo.Toolkit.Notifications;
+namespace GSalvi.Toolkit.Notifications;
 
 public sealed class NotificationManager
 {

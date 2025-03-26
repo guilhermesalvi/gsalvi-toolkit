@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace Sozo.Toolkit.Tests.Hosting;
+namespace GSalvi.Toolkit.Tests.Hosting;
 
 public class AppFactory : WebApplicationFactory<Program>
 {

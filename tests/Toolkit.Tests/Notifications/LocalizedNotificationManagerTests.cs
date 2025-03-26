@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
+using GSalvi.Toolkit.Notifications;
+using GSalvi.Toolkit.Tests.Hosting;
 using Microsoft.Extensions.Localization;
 using NSubstitute;
-using Sozo.Toolkit.Notifications;
-using Sozo.Toolkit.Tests.Hosting;
 
-namespace Sozo.Toolkit.Tests.Notifications;
+namespace GSalvi.Toolkit.Tests.Notifications;
 
 [Collection(nameof(FixtureCollection))]
 public class LocalizedNotificationManagerTests(TestHost host)

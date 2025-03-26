@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.Extensions.Localization;
 
-namespace Sozo.Toolkit.Notifications;
+namespace GSalvi.Toolkit.Notifications;
 
 public sealed class LocalizedNotificationManager(IStringLocalizer localizer)
 {

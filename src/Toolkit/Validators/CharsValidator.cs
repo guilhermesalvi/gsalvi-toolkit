@@ -1,4 +1,4 @@
-﻿namespace Sozo.Toolkit.Validators;
+﻿namespace GSalvi.Toolkit.Validators;
 
 using System.Collections.Generic;
 using System.Linq;

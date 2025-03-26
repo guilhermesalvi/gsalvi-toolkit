@@ -1,9 +1,9 @@
-# Sozo.Toolkit
+# GSalvi.Toolkit
 
 [![NuGet Version](https://img.shields.io/nuget/v/Sozo.Toolkit.svg)](https://www.nuget.org/packages/Sozo.Toolkit)  
 [![Build, Test, and Publish Package (Beta or Stable)](https://github.com/guilhermesalvi/sozo-toolkit/actions/workflows/main.yml/badge.svg)](https://github.com/guilhermesalvi/sozo-toolkit/actions/workflows/main.yml)
 
-**Sozo.Toolkit** is a versatile .NET utility library that brings together a set of helpers and extension methods to accelerate your development. This package includes:
+**GSalvi.Toolkit** is a versatile .NET utility library that brings together a set of helpers and extension methods to accelerate your development. This package includes:
 
 - **String Extensions:** Remove diacritics, specific characters, duplicate spaces, and non-alphanumeric characters.
 - **Logging Utilities:** Easily add custom properties to your Serilog logs with a fluent builder.

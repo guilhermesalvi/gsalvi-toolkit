@@ -1,4 +1,4 @@
-﻿namespace Sozo.Toolkit.Notifications;
+﻿namespace GSalvi.Toolkit.Notifications;
 
 public readonly record struct Notification(string Key, string Value)
 {

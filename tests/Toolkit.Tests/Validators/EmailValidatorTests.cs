@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Sozo.Toolkit.Validators;
+using GSalvi.Toolkit.Validators;
 
-namespace Sozo.Toolkit.Tests.Validators;
+namespace GSalvi.Toolkit.Tests.Validators;
 
 public class EmailValidatorTests
 {

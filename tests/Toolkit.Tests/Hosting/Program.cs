@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
-using Sozo.Toolkit.Notifications;
-using Sozo.Toolkit.Tests.Hosting.Resources;
+using GSalvi.Toolkit.Notifications;
+using GSalvi.Toolkit.Tests.Hosting.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 

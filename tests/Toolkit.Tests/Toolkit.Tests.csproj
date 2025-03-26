@@ -5,8 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <AssemblyName>Sozo.Toolkit.Tests</AssemblyName>
-        <RootNamespace>Sozo.Toolkit.Tests</RootNamespace>
+        <AssemblyName>GSalvi.Toolkit.Tests</AssemblyName>
+        <RootNamespace>GSalvi.Toolkit.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using Serilog.Core;
 using Serilog.Core.Enrichers;
 
-namespace Sozo.Toolkit.Logging;
+namespace GSalvi.Toolkit.Logging;
 
 public class LogEnricherBuilder
 {

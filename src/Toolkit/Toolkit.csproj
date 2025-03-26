@@ -4,8 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Sozo.Toolkit</RootNamespace>
-    <AssemblyName>Sozo.Toolkit</AssemblyName>
+    <RootNamespace>GSalvi.Toolkit</RootNamespace>
+    <AssemblyName>GSalvi.Toolkit</AssemblyName>
 
     <Version>0.0.1</Version>
     <Authors>Guilherme Salvi</Authors>

@@ -1,4 +1,4 @@
-﻿namespace Sozo.Toolkit.Extensions;
+﻿namespace GSalvi.Toolkit.Extensions;
 
 using System.Collections.Generic;
 using System.Globalization;
