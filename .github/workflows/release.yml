@@ -3,7 +3,7 @@ name: CD - Publish and Sync to Main
 
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
     branches:
       - release
 
@@ -27,32 +27,16 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.11.0
-        with:
-          versionSpec: '5.x'
-
-      - name: Execute GitVersion
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.11.0
-
       - name: Restore Dependencies
         run: dotnet restore
 
       - name: Build Solution
         run: dotnet build --configuration Release --no-restore
 
-      - name: Determine Package Version
+      - name: Determine Package Version (Timestamp)
         id: pkgversion
         run: |
-          echo "GITHUB_REF: $GITHUB_REF"
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            echo "Stable release detected."
-            VERSION="${{ steps.gitversion.outputs.NuGetVersion }}"
-          else
-            echo "Beta release detected."
-            VERSION="${{ steps.gitversion.outputs.MajorMinorPatch }}-beta.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
-          fi
+          VERSION="0.1.0-beta.$(date -u +'%Y%m%d%H%M%S')"
           echo "Using version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
