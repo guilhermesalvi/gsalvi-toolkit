@@ -42,11 +42,22 @@ jobs:
       - name: Build Solution
         run: dotnet build --configuration Release --no-restore
 
-      - name: Pack Project
+      - name: Determine Package Version
+        id: pkgversion
         run: |
-          dotnet pack --configuration Release --no-build \
-            --output ./artifacts \
-            /p:PackageVersion=${{ steps.gitversion.outputs.NuGetVersionV2 }}
+          echo "GITHUB_REF: $GITHUB_REF"
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "Stable release detected."
+            VERSION="${{ steps.gitversion.outputs.NuGetVersion }}"
+          else
+            echo "Beta release detected."
+            VERSION="${{ steps.gitversion.outputs.MajorMinorPatch }}-beta.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
+          fi
+          echo "Using version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Pack Project
+        run: dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ steps.pkgversion.outputs.version }}
 
       - name: Publish to NuGet
         env:
@@ -66,7 +77,7 @@ jobs:
       - name: Create Pull Request to Main
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GSALVI_TOOLKIT_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           source-branch: release
           target-branch: main
           title: '${{ github.event.pull_request.title }}'
@@ -76,6 +87,6 @@ jobs:
       - name: Auto Merge Pull Request
         uses: pascalgn/automerge-action@v0.16.3
         env:
-          GITHUB_TOKEN: ${{ secrets.GSALVI_TOOLKIT_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_LABELS: automated-pr
           MERGE_METHOD: merge
