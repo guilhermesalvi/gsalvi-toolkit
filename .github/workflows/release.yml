@@ -3,7 +3,7 @@ name: CD - Publish and Sync to Main
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [closed]
     branches:
       - release
 
@@ -27,17 +27,31 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.11.0
+        with:
+          versionSpec: '5.x'
+
+      - name: Execute GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.11.0
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Solution
+        run: dotnet build --configuration Release --no-restore
+
       - name: Determine Package Version
         id: pkgversion
         run: |
           echo "GITHUB_REF: $GITHUB_REF"
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          echo "Stable release detected."
-          VERSION="${{ steps.gitversion.outputs.NuGetVersion }}"
+            echo "Stable release detected."
+            VERSION="${{ steps.gitversion.outputs.NuGetVersion }}"
           else
-          echo "Beta release detected."
-          # Create a beta version by appending a beta suffix and the commit count
-          VERSION="${{ steps.gitversion.outputs.MajorMinorPatch }}-beta.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
+            echo "Beta release detected."
+            VERSION="${{ steps.gitversion.outputs.MajorMinorPatch }}-beta.${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
           fi
           echo "Using version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -73,3 +87,10 @@ jobs:
           body: '${{ github.event.pull_request.body }}'
           labels: automated-pr
           delete-branch: false
+
+      - name: Enable Pull Request Autocomplete
+        run: |
+          pr_number=$(gh pr list --head sync/release-to-main --base main --json number --jq '.[0].number')
+          gh pr merge "$pr_number" --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
