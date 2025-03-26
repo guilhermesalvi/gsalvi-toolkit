@@ -14,7 +14,7 @@ public static class StringExtensions
     public static string RemoveDiacritics(this string? value)
     {
         if (string.IsNullOrEmpty(value))
-            return string.Empty;
+            return string.Empty; 
 
         var normalizedString = value.Normalize(NormalizationForm.FormD);
         var sb = new StringBuilder(normalizedString.Length);
