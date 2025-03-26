@@ -12,7 +12,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  publish_and_sync:
+  publish:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -52,6 +52,16 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./artifacts/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+
+  sync_to_main:
+    needs: publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Create Pull Request to Main
         uses: peter-evans/create-pull-request@v6
