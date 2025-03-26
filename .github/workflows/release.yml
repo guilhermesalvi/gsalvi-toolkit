@@ -1,5 +1,5 @@
-# CD Workflow: Publish and Cherry Pick
-name: CD - Publish and Cherry Pick
+# CD Workflow: Publish and Sync to Main
+name: CD - Publish and Sync to Main
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  publish_and_cherry_pick:
+  publish_and_sync:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -53,15 +53,19 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./artifacts/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
 
-      - name: Checkout Main Branch
-        uses: actions/checkout@v4
+      - name: Create Pull Request to Main
+        uses: peter-evans/create-pull-request@v6
         with:
-          fetch-depth: 0
-          ref: main
+          token: ${{ secrets.GSALVI_TOOLKIT_GITHUB_TOKEN }}
+          source-branch: release
+          target-branch: main
+          title: '${{ github.event.pull_request.title }}'
+          body: '${{ github.event.pull_request.body }}'
+          labels: automated-pr
 
-      - name: Cherry Pick Commit
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git cherry-pick ${{ github.event.pull_request.merge_commit_sha }}
-          git push origin main
+      - name: Auto Merge Pull Request
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GSALVI_TOOLKIT_GITHUB_TOKEN }}
+          MERGE_LABELS: automated-pr
+          MERGE_METHOD: merge
