@@ -3,7 +3,7 @@ name: CD - Publish and Sync to Main
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [closed]
     branches:
       - release
 
@@ -65,7 +65,7 @@ jobs:
           committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: sync/release-to-main
+          branch: release
           base: main
           title: '${{ github.event.pull_request.title }}'
           body: '${{ github.event.pull_request.body }}'
@@ -74,7 +74,12 @@ jobs:
 
       - name: Enable Pull Request Autocomplete
         run: |
-          pr_number=$(gh pr list --head sync/release-to-main --base main --json number --jq '.[0].number')
-          gh pr merge "$pr_number" --auto --merge
+          pr_number=$(gh pr list --head release --base main --json number --jq '.[0].number')
+          if [ -n "$pr_number" ]; then
+            echo "Auto-merging PR #$pr_number..."
+            gh pr merge "$pr_number" --auto --merge
+          else
+            echo "No PR found to auto-merge. Skipping."
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
