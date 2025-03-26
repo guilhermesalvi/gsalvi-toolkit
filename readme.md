@@ -1,7 +1,8 @@
 # GSalvi.Toolkit
 
+[![CI - Build and Test](https://github.com/guilhermesalvi/gsalvi-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/guilhermesalvi/gsalvi-toolkit/actions/workflows/ci.yml) 
+[![CD - Publish and Sync to Main](https://github.com/guilhermesalvi/gsalvi-toolkit/actions/workflows/release.yml/badge.svg)](https://github.com/guilhermesalvi/gsalvi-toolkit/actions/workflows/release.yml) 
 [![NuGet Version](https://img.shields.io/nuget/v/GSalvi.Toolkit.svg)](https://www.nuget.org/packages/GSalvi.Toolkit)  
-[![Build, Test, and Publish Package (Beta or Stable)](https://github.com/guilhermesalvi/gsalvi-toolkit/actions/workflows/main.yml/badge.svg)](https://github.com/guilhermesalvi/gsalvi-toolkit/actions/workflows/main.yml)
 
 **GSalvi.Toolkit** is a versatile .NET utility library that brings together a set of helpers and extension methods to accelerate your development. This package includes:
 
