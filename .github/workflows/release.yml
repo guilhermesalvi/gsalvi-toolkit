@@ -74,7 +74,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create Pull Request to Main
+      - name: Create and Auto Merge Pull Request to Main
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,10 +83,7 @@ jobs:
           title: '${{ github.event.pull_request.title }}'
           body: '${{ github.event.pull_request.body }}'
           labels: automated-pr
-
-      - name: Auto Merge Pull Request
-        uses: pascalgn/automerge-action@v0.16.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: automated-pr
-          MERGE_METHOD: merge
+          merge-method: merge
+          delete-branch: false
+          ignore-no-changes: true
+          
