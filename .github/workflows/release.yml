@@ -74,14 +74,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create and Auto Merge Pull Request to Main
+      - name: Create Pull Request from release to main
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: merge-release-to-main
+          branch: sync/release-to-main
           base: main
           title: '${{ github.event.pull_request.title }}'
           body: '${{ github.event.pull_request.body }}'
           labels: automated-pr
-          merge-method: merge
-          delete-branch: false
+          delete-branch: true
+          enable-auto-merge: true
